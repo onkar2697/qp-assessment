@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  grocery-booking-api:
+    build:
+      context: .  # Build the Docker image using the Dockerfile in the current directory
+    ports:
+      - "8080:8080"  # Map port 8080 from the container to 8080 on the host
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/grocery_items
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root123
+    depends_on:
+      - db  # Ensure the application starts after the database is available
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: grocery_items
+    ports:
+      - "3306:3306"  # Optional: Expose MySQL port for external connections
+    volumes:
+      - mysql-data:/var/lib/mysql  # Persist MySQL data between container restarts
+
+volumes:
+  mysql-data:
